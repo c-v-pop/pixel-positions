@@ -11,14 +11,6 @@ use Illuminate\Validation\Rules\Password;
 class RegisteredUserController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
      * Show the form for creating a new resource.
      */
     public function create()
@@ -34,54 +26,27 @@ class RegisteredUserController extends Controller
         $userAttributes = $request->validate([
             'name' => ['required'],
             'email' => ['required', 'email', 'unique:users,email'],
-            'email_verified_at' => ['nullable', 'date'],
-            'password' => ['required', 'confirmed', Password::min(7)],
-            'remember_token' => ['nullable'],
+            'password' => ['required', 'confirmed', Password::min(6)],
         ]);
+
         $employerAttributes = $request->validate([
-            'name' => ['required'],
+            'employer' => ['required'],
             'logo' => ['required', File::types(['png', 'jpg', 'webp'])],
         ]);
 
         $user = User::create($userAttributes);
 
-        
+        $logoPath = $request->logo->store('logos');
 
-        $user->employer()->create($employerAttributes);
+        $user->employer()->create([
+            'name' => $employerAttributes['employer'],
+            'logo' => $logoPath,
+        ]);
 
         Auth::login($user);
+
+        return redirect('/');
         
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
 }
