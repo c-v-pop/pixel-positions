@@ -22,4 +22,4 @@ Route::get('/login', [SessionController::class, 'create'])->name('login');
 Route::post('/login', [SessionController::class,'store']);
 });
 
-Route::delete('/logout', [SessionController::class,'destroy'])->middleware('auth');
+Route::delete('/logout', [SessionController::class, 'destroy'])->middleware('auth')->name('logout');

@@ -26,8 +26,14 @@
             </div>
             
             @auth
-                <div>
+                <div class="space-x-6 font-bold flex">
                    <a href="/jobs/create">Post a job</a>
+
+                   <form action="{{ route('logout') }}" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit">Logout</button>
+                </form>
                 </div>
             @endauth
             @guest

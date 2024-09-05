@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Job;
 use App\Http\Requests\StoreJobRequest;
 use App\Http\Requests\UpdateJobRequest;
+use App\Models\Job;
 use App\Models\Tag;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
@@ -20,11 +19,11 @@ class JobController extends Controller
     public function index()
     {
 
-        $jobs = Job::all()->groupBy('featured');
+        $jobs = Job::latest()->with(['employer', 'tags'])->get()->groupBy('featured');
 
         return view('jobs.index', [
-            'featuredJobs' => $jobs[0],
-            'jobs' => Job::all(),
+            'jobs' => $jobs[0],
+            'featuredJobs' => $jobs[1],
             'tags' => Tag::all(),
         ]);
     }
@@ -42,11 +41,11 @@ class JobController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+        $attributes = $request->validate([
             'title' => ['required'],
             'salary' => ['required'],
             'location' => ['required'],
-            'schedule' => ['required', Rule::in(['Part Tine', 'Full-time'])],
+            'schedule' => ['required', Rule::in(['Part Time', 'Full Time'])],
             'url' =>    ['required', 'active_url'],
             'tags' =>    ['nullable'],
         ]);
