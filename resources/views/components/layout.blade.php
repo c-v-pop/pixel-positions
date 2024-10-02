@@ -11,8 +11,8 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="bg-black text-white font-hanken-grotesk pb-20">
-    <div>
-        <h1>Pixel Positions</h1>
+    <div class="flex justify-center items-center">
+        <h1 class="text-red-500">Pixel Positions</h1>
         <ul>
             <h2>This will be a job board to:</h2>
             <li>Post a job</li>
